@@ -36,6 +36,19 @@ app.use(express.static(publicPath));
 
 io.on('connection',(socket)=>{
 
+
+    socket.emit("newMessage",{
+       from:"Server",
+        text:"Welcome New User",
+        createAt:new Date().getTime()
+    });
+
+    socket.broadcast.emit("newMessage",{
+       from:"Server",
+       text:"A new user had joined",
+       createAt:new Date().getTime()
+    });
+
     console.log("new user connected");
     socket.on('createMessage',(message)=>{
         io.emit('newMessage',{
@@ -43,6 +56,11 @@ io.on('connection',(socket)=>{
             text:message.text,
             createAt:new Date().getTime()
         });
+        // socket.broadcast.emit('newMessage',{
+        //     from:message.from,
+        //     text:message.text,
+        //     createAt:new Date().getTime()
+        // });
     });
 
 
